@@ -1,0 +1,275 @@
+5-Aug-2019
+
+
+http://bit.ly/spring5_01_vatsan
+    bit.ly//Spring5_Module2_VDSI_Freshers
+
+
+Spring - App dev. framework .
+SpringBoot - we don't need to know the dependencies/jar required.Makes devep. using Spring easier
+Microservices - Dividing parts of a function than monolithic (all work by one thing.)
+******************************************************************************************************************************************************************************
+SPRING - Lightweight,comprehensive(ie. all kind of application, stadalone,web etc) framework from dev. JAVA SE and JAVA EE app.
+
+
+Collaborative Object --> Eg. List of Employees---> Employee = object and then List of those objects
+Dependency injec -- achieved by defining the dependecies and injecting (using constr. or setter) in concrete class.
+
+SRP - Single Responsibility Principle --->
+
+
+Inversion Principle / Inversion of Control(IOC)  : Object creation is inverted. The way objects are created
+
+Lower level module should define an interface that High Level module depend one
+Higher Level Module should define an interface which Lower Level module must implement
+
+
+Container ----> Interface called BeanFactory(top level interface)
+Bean - Any java object managed by  BeanFactory(IOC container)
+
+ApplicationContext ---> Interface 
+
+Beans - normal object instantiated by IOC container
+AnnotationConfigApplicationContext is a class that extends ApplicationContext and ApplicationContext extends BeanFactory so ACAC is also a BeanFactory
+
+All bean are singleton(one one instance)   and are EAGERLY initialized....even before we call them
+
+
+
+SPRING provides 4 dependecies-
+Setter dependency ---> Optional depency ..object can be created without calling the setter method
+Constructor depencendy ---> Mandatory depency --> as  if cons. has arg. it is mandatory to pass the argument while object creation.   
+
+
+Bean can be accessed by getBean() method in 2 ways
+id ---> type casting required
+type -->  type casting not required
+
+
+Sring MVC  ---> we send the view and back to the client
+Spring REST ---> we don't send the view ..just send the response data which can be consumed in whichever way the client wants
+
+******************************************************************************************************************************************************************************
+
+
+MAven - aggregated of all the dependencies/jars    ( just like NPM )
+
+
+Create a Maven project :    Ctrl+n > Maven > Maven Project > Simple Project
+Group Id like package name : com.training
+Artifact Id : like name of the project eg. quickStart
+Version :  0.0.1 SNAPSHOT (development)
+Add dependecies :     
+Search maven repository on google > Spring search > Spring Core(5.1.3) & Spring Context 
+Maven dependecies will be added in the panel ...In context>context.annotation>ACAC class(container)
+
+Create a class in src/main  ---> eg. Doctor             ---> POJO(Plain Javascript Object) class
+
+Create again a class AppConfig ---> write @Configuration (Ctrl+space)   -------------> This is configuration metadata class
+
+Create a class (Application) - with main method
+
+
+So IOC provided by SYstem....rest 2 classes we have to create (ie. POJO,Configuration metadata)
+
+
+TO make BEAN lazy (initilize when called) ---> annotate @LAZy after bean
+
+******************************************************************************************************************************************************************************
+6 Aug 2019
+
+
+Constructor Dependency injection
+Springs resolves arg. primarily by  Type,followed by name then by index (of parameter)
+
+Create Next Maven Project > Simple Project check box > Group me package name > Artifact me project name
+
+
+
+For Spring MVC
+Create Next Maven Project >  Don't check the box >> maven-web-apps 
+
+
+
+
+7 Aug
+
+COntroller = Normal class...@Contoller annotation (also called stereotype)
+Which method of controller should be called ----> decided by  @Request annotation
+@Request("/first)
+public MModelAndView execute(){
+    // ModelAndView() --> Java class already present
+    String message = "Hello"
+    retrun ModelAndView("Success","msg",message);               Success is view.... "msg"= key(name of the model) and message = Model (data)
+
+                                                                msg is accessible only in view(ie. Success to access the message)
+}
+
+@Request("/sd)                                                  // Second way of writing above function
+publiv getMessage(){
+    ModelAndView mdl = new ModelAndView();
+    mdl.setViewName("Second")
+    mdl.addObject("msg","Hello India")
+}
+
+@ModelAttribute ----> used when we want to autofill a form dynamically from a response from the controller. We make a request to controller ..controller responds back and autopopulates form
+
+
+Annotations can be give at 4 levels :
+1. class    @Configuration
+2. method   @Request
+3. Field    @Autowired
+4. Parameter  @ModelAttribute -- can be used on top of method or argument to method. Works differently in each classes
+
+If above method ----> pre-populates the value in form
+eg. 
+@ModelAttribute("location")
+public abc(){
+    return string[]{'a','b','c'}
+}
+In form we can write --> input type= select value=${location}
+
+
+In argument to the method ----> pre-populates the value in form
+Model = Spring Object
+eg. 
+@GetMapping("/addTrip")
+public String initForm(Model model){
+    model.addAttribute("command",detail)            Adding Model now.."command" is a default object ...
+    return "addTripDetails" ----> if get requests...returns addTripDetails.jsp ...if post ..then posts data to addTripDetails
+}
+@PostMapping("/addTrip)
+public String onSubmit(@ModelAttribute("data") TripDetails detail){
+    sop(details);
+    return "Succss"
+}
+
+
+******************************************************************************************************************************************************************************
+
+NEW PROJECT
+
+Window > Preferences > Server > RunTIme Env > Set Tomcat (>8)
+File > New > Other > Maven Project > Next (without checkbox mark) >  last(webapp one) > groupName(package name) > artifactID(projectName)
+We need to create a java folder (src/main/java)  -- to contain all the files of .java otherwise it is considered as simple text
+Right click project > Build Path > COnfigure Build Path > REmove 1.5 version> ADd Library> JRE> 1.8 
+Edit pom.xml -> Add dependecies
+
+Controller Part
+Make a class(Welcome Controller with package controller) in src>main>java
+
+View Part 
+Go to WEB-INF folder(secured...can't be viewed by client) > Create a new folder(views) >  Create index.jsp(should be same as named returned from controller)
+(Right Click > New > Others>Web>Index.jsp)
+
+ViewResolver (Configuration Class)  : To resolve the file returned from controller to some format for the view
+Create new class in java folder(WebConfig in .config package) which implements WebMVCConfigurer interface. CLick Add while creating class
+Register beans --> InternalResourceNewResolver
+
+
+Dispatcher Servlet (provided by spring)
+Create a new class(RegisterDispatcher in config package) which extends AbstractAnnotationDispatchServerInitializer
+
+
+Create new class (Doctor in model package)
+
+******************************************************************************************************************************************************************************
+
+CTRL+N > SPring Boot > Simple Boot PRoject  > Next > Next >Finish
+
+******************************************************************************************************************************************************************************
+
+8 Aug 2019
+
+Web Services - Enterprise Application Integration. Integration of different applications(technologies) like payroll files as input to Peoplesoft is a challenge ..so we need a
+mediator. 
+So web services use xml ----> which is common in all the applications
+
+Service - software componenet provided through network accessible endpoint.
+
+Terminologies :
+PROVIDERS and CONSUMERS  -- are must
+There must be a way they both should communicate.
+Even if there are multiple producer....we nned to know which one matches our requirement.
+How do producer know that consumer available or vice versa ???  Through i registry which has list of all the producer and consumer available 
+
+
+BIG web service(SOAP Web Servuces -> Simple Object Access Protocols)
+-> uses xml (how will producer and consumer know ..ehich tag means wt? say producer has empName while consumer expects ename)
+-> For that we have WDSL
+
+-> Big xml codes for even small procedures.
+
+
+REST(Representational WEb Transfer) WEB SERVICE
+-> Everything will be Resource 
+-> Every data will be assigned a unique id --> and is accessible from id ie. CRUD operations
+
+Root Resource :
+Simple POJO classes annotated with @Path can also have one method @Path
+
+
+WE need to convert JAVA objects to JSON so that consumer does have to parse or divide string...so we send as JSON 
+JACKSON.jar is the parsing tool that converts JAVA object to JSON
+
+
+SpringBoot will be used to convert java object to JSON
+-> Simplifies eerything. Embedded sever.
+-> starter class is Annotated with @SpringBootApplication
+-> Equivalent to using @Configuration @EnableAutoConfiguration and @ComponentScan   . But scans only the packages that are at a level below where Sprin app. is created.
+If there is a package above the SpringBoot class...then we will have to use @ComponentScan
+
+
+REST doesn;t require client to know anything about structure of Application
+Server needs to provie whatever information the clients needs to interact with the service.
+
+
+@RestController is combination of @Controller and @ResponseBody
+
+******************************************************************************************************************************************************************************
+
+New Spring Starter project (productManager) > Add lambok>rest repository>HATEOS>rest repository HAL browser
+
+Under resources ---> application.properties (key-value)--> all the configuration done here or modifying default behaviour
+JACKSON.jar is the parsing tool that converts JAVA object to JSON
+
+
+Create a class Product (in a subpackage of example ie.example.demo.model so that REST automatically scans and we don't need to write @Component)
+Create a class ProductController (in a subpackage of example ie example.demo.controller so that REST automatically scans and we don't need to write @Component)
+Create a class AppConfig (in a subpackage of example ie example.demo.config) so that REST automatically scans and we don't need to write @Component)
+
+
+
+REST TEMPLATE ----> COnverting JSON to Java
+Autowired to controller class
+exchange method()
+
+******************************************************************************************************************************************************************************
+9th Aug
+
+SWAGGER - application that helps in documenting RESTful services easy. @EnableSwagger2 applied to @Configuration class
+now call ... http:localhost:8080/swagger-ui.html
+
+
+Create new Spring Starter with Lombok,Spring Starter,Rest Repo, Spring Security
+Create class(storesManagers) package .model
+Create controller(StorageController)    package .controller
+Create service(StoreService)    package .service
+
+
+******************************************************************************************************************************************************************************
+
+@ENTITY - to map row
+@TABLE - table to map.
+@ID - Jis variable k aage ye likhenge...vo primary key pe map hoga
+
+Used to map java row and columns to JAVA variables
+
+Add Crud repository in PaymentRepository
+
+******************************************************************************************************************************************************************************
+12 Aug
+
+Spring Cache :
+
+SPEL : Spring Expression Language
